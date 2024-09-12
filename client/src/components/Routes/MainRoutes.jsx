@@ -17,6 +17,7 @@ import CartPage from '../pages/static/Cartpage'
 import CheckoutPage from '../pages/static/CheckoutPage'
 import OrderConfirmationPage from '../pages/static/OrderConfirmation'
 import PaymentPage from '../pages/static/Paymentpage'
+import Protected from '../utills/Protected'
 
 const MainRoutes = () => {
   return (
@@ -28,16 +29,12 @@ const MainRoutes = () => {
           <Route path='/products' element={<Products/>} />
           <Route path='/about' element={<About/>} />
           <Route path='/contact' element={<Contact/>} />
-          <Route path='/category/jewelery' element={<Jewelery/>} />
-          <Route path='/category/menscloth' element={<MensCloth/>} />
-          <Route path='/category/womenscloth' element={<WomensCloth/>} />
-          <Route path='/category/electronics' element={<Electronics/>} />
           <Route path='/product-details' element={<ProductDetails/>} />
-          <Route path='/cartpage' element={<CartPage/>} />
-          <Route path='/order/product' element={<OrderPage/>} />
-          <Route path='/checkout/product' element={<CheckoutPage/>} />
-          <Route path='/payment/product' element={<PaymentPage/>} />
-          <Route path='/order-confirmation/product' element={<OrderConfirmationPage/>} />
+          <Route path='/cartpage' element={<Protected Component={CartPage}/>} />
+          <Route path='/order/product' element={<Protected Component={OrderPage}/>} />
+          <Route path='/checkout/product' element={<Protected Component={CheckoutPage}/>} />
+          <Route path='/payment/product' element={<Protected Component={PaymentPage}/>} />
+          <Route path='/order-confirmation/product' element={<Protected Component={OrderConfirmationPage}/>} />
           <Route path='*' element={<Notfound/>} />
         </Routes>
     </>
