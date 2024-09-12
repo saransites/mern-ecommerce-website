@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --shape-bg: #f2f2f8f6;
+}
+#root{
+  background: var(--shape-bg);
+}
+.round {
+  position: absolute;
+  bottom: 0rem;
+  right: -0.5rem;
+  width: 5rem;
+  height: 5rem;
+  border-top-left-radius: 50%;
+
+  &::before {
+    position: absolute;
+    content: "";
+    bottom: 0rem;
+    left: -1.7rem;
+    background: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-bottom-right-radius: 1.25rem;
+    box-shadow: 0.313rem 0.313rem 0 0.313rem var(--shape-bg);
+  }
+  
+  &::after {
+    position: absolute;
+    content: "";
+    top: -1.55rem;
+    right: 0.517rem;
+    background: transparent;
+    width: 1.4rem;
+    height: 1.3rem;
+    border-bottom-right-radius: 1.25rem;
+    box-shadow: 0.313rem 0.313rem 0 0.313rem var(--shape-bg);
+  }
+
+  .iconBox {
+    position: absolute;
+    inset:0.4rem;
+    border-radius: 50% 0 50% 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+    box-shadow: 0 0 0 0.6rem var(--shape-bg);
+  }
+}
+.productshape {
+  --shape-bg:red;
+  position: absolute;
+  top: 0rem;
+  right: -0.5rem;
+  width: 5rem;
+  height: 5rem;
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0rem;
+    left: -8.95rem;
+    background: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-top-right-radius: 1.25rem;
+    box-shadow: 0.313rem -0.313rem 0 0.313rem var(--shape-bg);
+  }
+  
+  &::after {
+    position: absolute;
+    content: "";
+    top: 0rem;
+    left: 1.24rem;
+    background: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-top-left-radius: 1.25rem;
+    box-shadow: -0.313rem -0.313rem 0 0.313rem var(--shape-bg);
+  }
+}
