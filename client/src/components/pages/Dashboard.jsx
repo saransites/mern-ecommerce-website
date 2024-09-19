@@ -2,6 +2,7 @@ import { useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { Star } from '@mui/icons-material'
 
 const HomePage = () => {
   const theme = useTheme();

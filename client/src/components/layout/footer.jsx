@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebook,FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa6";
+import { Facebook,Twitter,Instagram,LinkedIn } from '@mui/icons-material'
 
 const Footer = () => {
   return (
@@ -42,16 +42,16 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white">
-                <FaFacebook className="h-6 w-6" />
+                <Facebook className="h-6 w-6" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white">
-                <FaTwitter className="h-6 w-6" />
+                <Twitter className="h-6 w-6" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white">
-                <FaInstagram className="h-6 w-6" />
+                <Instagram className="h-6 w-6" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white">
-                <FaLinkedin className="h-6 w-6" />
+                <LinkedIn className="h-6 w-6" />
               </a>
             </div>
           </div>
