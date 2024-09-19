@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Routes,Route } from 'react-router-dom'
 import Login from '../pages/Authentication/Login'
 import Signup from '../pages/Authentication/Signup'
@@ -22,7 +22,9 @@ const MainRoutes = () => {
           <Route path='/login' element={<Login/>} />
           <Route path='/signup' element={<Signup/>} />
           <Route path='/' element={<Dashboard/>} />
-          <Route path='/products' element={<Products/>} />
+          <Route path='/products' element={<Suspense fallback={<h1>loading...</h1>}>
+            <Products/>
+          </Suspense>} />
           <Route path='/about' element={<About/>} />
           <Route path='/contact' element={<Contact/>} />
           <Route path='/product-details' element={<ProductDetails/>} />
