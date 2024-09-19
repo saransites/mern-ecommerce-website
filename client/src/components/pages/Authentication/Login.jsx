@@ -52,7 +52,7 @@ const Login = () => {
   };
 
   return (
-    <Container
+    <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -66,7 +66,7 @@ const Login = () => {
         sx={{
           width: '100%',
           maxWidth: 900,
-          height:450,
+          height:500,
           display: 'flex',
           bgcolor: '#f5f5f5',
           borderRadius: 6,
@@ -148,7 +148,7 @@ const Login = () => {
           </Grid>
         </Box>
       </Box>
-    </Container>
+    </Box>
   );
 };
 

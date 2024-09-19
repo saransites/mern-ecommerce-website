@@ -1,90 +1,76 @@
 import React from "react";
-import { Box, Container, Grid, Typography, IconButton } from "@mui/material";
-import { GitHub, LinkedIn, YouTube } from "@mui/icons-material";
-import { Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import { FaFacebook,FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <Box
-      component="footer"
-      sx={{ color: "#ffffff", py: 4 }}
-      className="bg-[#262626]"
-    >
-      <Container>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <Box className="flex items-center">
-              <img src={logo} className="w-14 rounded-full" />
-              <Typography variant="h4" className="pt-4 pl-2" gutterBottom>
-                Store
-              </Typography>
-            </Box>
-            <Typography variant="body2" sx={{ mt: 1 }}>
-              Made with{" "}
-              <span role="img" aria-label="heart">
-                ❤️
-              </span>{" "}
-              by Store
-            </Typography>
-            <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-              <IconButton
-                sx={{ color: "#ffffff", background: "rgba(255,255,255,0.1)" }}
-              >
-                <GitHub />
-              </IconButton>
-              <IconButton
-                sx={{ color: "#ffffff", background: "rgba(255,255,255,0.1)" }}
-              >
-                <LinkedIn />
-              </IconButton>
-              <IconButton
-                sx={{ color: "#ffffff", background: "rgba(255,255,255,0.1)" }}
-              >
-                <YouTube />
-              </IconButton>
-            </Box>
-            <Typography variant="body2" sx={{ mt: 2 }}>
-              2024 © All Rights Reserved
-            </Typography>
-          </Grid>
-
-          <Grid item xs={6} md={3}>
-            <Box className="backdrop-blur-xl bg-[rgba(255,255,255,0.1)] space-y-1 p-6 rounded-xl ml-2 sm:ml-0">
-              <Typography color="inherit" underline="hover">
-                About
-              </Typography>
-              <Typography color="inherit" underline="hover">
-                Our mission
-              </Typography>
-              <Typography color="inherit" underline="hover">
-                Privacy Policy
-              </Typography>
-              <Typography color="inherit" underline="hover">
-                Terms of service
-              </Typography>
-            </Box>
-          </Grid>
-
-          <Grid item xs={6} md={3} justifySelf="end">
-            <Box className="backdrop-blur-xl bg-[rgba(255,255,255,0.1)] space-y-1 p-6 rounded-xl">
-              <Typography color="inherit" underline="hover">
-                Services
-              </Typography>
-              <Link to="/products" color="inherit" underline="hover">
-                Products
-              </Link>
-              <Typography color="inherit" underline="hover">
-                Join our team
-              </Typography>
-              <Typography color="inherit" underline="hover">
-                Partner with us
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+    <footer className="bg-gray-800 text-white">
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">About Us</h3>
+            <p className="text-gray-400">
+              We are committed to providing the best shopping experience for our
+              customers.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  FAQ
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  Shipping
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  Returns
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+            <p className="text-gray-400">Email: support@example.com</p>
+            <p className="text-gray-400">Phone: (123) 456-7890</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+            <div className="flex space-x-4">
+              <a href="#" className="text-gray-400 hover:text-white">
+                <FaFacebook className="h-6 w-6" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white">
+                <FaTwitter className="h-6 w-6" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white">
+                <FaInstagram className="h-6 w-6" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white">
+                <FaLinkedin className="h-6 w-6" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 border-t border-gray-700 pt-8 flex justify-between items-center">
+          <p className="text-gray-400">
+            &copy; 2023 Your E-commerce Store. All rights reserved.
+          </p>
+          <div className="flex space-x-4">
+            <a href="#" className="text-gray-400 hover:text-white">
+              Privacy Policy
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              Terms of Service
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 

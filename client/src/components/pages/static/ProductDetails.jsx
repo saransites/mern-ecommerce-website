@@ -40,96 +40,89 @@ const ProductDetails = () => {
   const isProductInCart = cart?.items?.some(
     (item) => item.title === product.title
   );
-
   return (
-    <Container maxWidth="lg" sx={{ p: 4 }}>
-      <Grid container spacing={4}>
-        {/* Product Image */}
-        <Grid item xs={12} md={6}>
-          <IconButton
-            onClick={() => window.history.back()}
-            sx={{
-              backgroundColor: "#303036",
-              "&:hover": {
-                background: "#303050",
-              },
-            }}
-          >
-            <ArrowBackOutlined sx={{ color: "#fff" }} />
-          </IconButton>
-          <CardMedia
-            component="img"
-            image={product.image}
-            alt={product.title}
-            sx={{
-              aspectRatio: 6 / 3,
-              objectFit: "contain",
-              mixBlendMode: "multiply",
-            }}
-          />
-        </Grid>
-
-        {/* Product Details */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ p: 1, boxShadow: 2,bgcolor:"#DAE3E5" }}>
-            <CardContent>
-              <Typography
-                variant="h4"
-                component="div"
-                sx={{ mb: 2, fontSize: "clamp(1rem,1.104rem + 2.5vw,1.4rem)" }}
-                fontWeight={600}
-              >
-                {product?.title}
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
-                ${product?.price}
-              </Typography>
-              <Typography
-                sx={{ mb: 2 }}
-                className="text-[clamp(0.8rem, 20vw, 1.5rem)]"
-              >
-                {product?.description}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Category: {product?.category}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Rating: {product?.rating?.rate} ({product?.rating?.count}{" "}
-                reviews)
-              </Typography>
-              <Box sx={{ mt: 2 }}>
-                {/* Conditionally render "Add to Cart" button if product is not in the cart */}
-                {!isProductInCart && (
-                  <Button
-                    onClick={() => {
-                      if (!user) {
-                        toast.warning("Please login and continue...");
-                      }
-                      setOpen(true);
-                    }}
-                    variant="contained"
-                    color="primary"
-                    sx={{ mr: 2,bgcolor:`${theme.palette.secondary.subHeading}`, "&:hover": { bgcolor: "#4A314D" }, }}
-                  >
-                    Add to Cart
-                  </Button>
-                )}
-                <Button
-                  onClick={() =>
-                    user
-                      ? navigate(`/order/product`, { state: product })
-                      : navigate("/login")
-                  }
-                  variant="outlined"
-                  color="info"
+    <Container maxWidth="lg">
+      <Box className="shadow-[0_0_10px_#424242] rounded-lg overflow-hidden m-6 p-4 relative">
+        <Grid container spacing={4}>
+          {/* Product Image */}
+          <Grid item xs={12} md={6}>
+            <IconButton onClick={()=>window.history.back()} sx={{bgcolor:"#262626",'&:hover':{bgcolor:"#26262699"}}}>
+              <ArrowBackOutlined sx={{ color: "#fff",cursor:"pointer" }} />
+            </IconButton>
+            <CardMedia
+              component="img"
+              image={product.image}
+              alt={product.title}
+              sx={{
+                aspectRatio: 6 / 3,
+                objectFit: "contain",
+                mixBlendMode: "multiply",
+              }}
+            />
+          </Grid>
+  
+          {/* Product Details */}
+          <Grid item xs={12} md={6}>
+            <Card sx={{ p: 1, boxShadow: 2,bgcolor:"#DAE3E5" }}>
+              <CardContent>
+                <Typography
+                  variant="h4"
+                  component="div"
+                  sx={{ mb: 2, fontSize: "clamp(1rem,1.104rem + 2.5vw,1.4rem)" }}
+                  fontWeight={600}
                 >
-                  Buy Now
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
+                  {product?.title}
+                </Typography>
+                <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+                  ${product?.price}
+                </Typography>
+                <Typography
+                  sx={{ mb: 2 }}
+                  className="text-[clamp(0.8rem, 20vw, 1.5rem)]"
+                >
+                  {product?.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Category: {product?.category}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Rating: {product?.rating?.rate} ({product?.rating?.count}{" "}
+                  reviews)
+                </Typography>
+                <Box sx={{ mt: 2 }}>
+                  {/* Conditionally render "Add to Cart" button if product is not in the cart */}
+                  {!isProductInCart && (
+                    <Button
+                      onClick={() => {
+                        if (!user) {
+                          toast.warning("Please login and continue...");
+                        }
+                        setOpen(true);
+                      }}
+                      variant="contained"
+                      color="primary"
+                      sx={{ mr: 2,bgcolor:`${theme.palette.secondary.subHeading}`, "&:hover": { bgcolor: "#4A314D" }, }}
+                    >
+                      Add to Cart
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() =>
+                      user
+                        ? navigate(`/order/product`, { state: product })
+                        : navigate("/login")
+                    }
+                    variant="outlined"
+                    color="info"
+                  >
+                    Buy Now
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
       {user && <ProductModal open={open} setOpen={setOpen} product={product} />}
     </Container>
   );

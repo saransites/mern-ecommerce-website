@@ -4,7 +4,7 @@ import Login from '../pages/Authentication/Login'
 import Signup from '../pages/Authentication/Signup'
 import Dashboard from '../pages/Dashboard'
 import Notfound from '../404/Notfound'
-import Products from '../pages/static/Products'
+const Products=React.lazy(()=>import('../pages/static/Products'))
 import ProductDetails from '../pages/static/ProductDetails'
 import About from '../pages/static/About'
 import Contact from '../pages/static/Contact'

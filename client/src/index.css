@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-  --shape-bg: #f2f2f8f6;
+  --shape-bg: rgb(243 244 246);
 }
 #root{
   background: var(--shape-bg);
@@ -81,5 +81,64 @@
     height: 1.5rem;
     border-top-left-radius: 1.25rem;
     box-shadow: -0.313rem -0.313rem 0 0.313rem var(--shape-bg);
+  }
+}
+
+.animation {
+  animation: animate 1s ease-in-out forwards;
+  opacity: 0;
+}
+
+.animation:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.animation:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.animation:nth-child(3) {
+  animation-delay: 1.2s;
+}
+
+.animation:nth-child(4) {
+  animation-delay: 1.8s;
+}
+@keyframes animate {
+  from {
+    transform: translateX(-5rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.imgAnimate{
+  animation: imganimate 1s ease-in-out 1.8s forwards;
+  opacity: 0;
+}
+@keyframes imganimate {
+  from {
+    transform: translateX(5rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animate-slideUp {
+  animation: slideUp 0.5s ease forwards;
+  opacity: 0;
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }

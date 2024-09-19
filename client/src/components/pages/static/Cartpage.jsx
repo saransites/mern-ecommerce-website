@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Container,
   Box,
@@ -16,8 +16,9 @@ import {
 import { Add, Remove, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
+import { ConfirmDeleteModal } from "../../hooks/DeleteModal";
 
-const CartItem = ({ product, onQuantityChange, onRemoveItem,onNavigate }) => {
+const CartItem = ({ product, onQuantityChange, onRemoveItem, onNavigate }) => {
   return (
     <Grid item xs={12} key={product._id}>
       <Card sx={{ display: "flex", alignItems: "center" }}>
@@ -28,7 +29,9 @@ const CartItem = ({ product, onQuantityChange, onRemoveItem,onNavigate }) => {
           sx={{ width: 100, height: 100, objectFit: "contain" }}
         />
         <CardContent sx={{ flexGrow: 1 }}>
-          <h6 onClick={onNavigate} className="cursor-pointer text-[#526728]">{product.title}</h6>
+          <h6 onClick={onNavigate} className="cursor-pointer text-[#526728]">
+            {product.title}
+          </h6>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
             ${product.price.toFixed(2)} x {product.quantity}
           </Typography>
@@ -59,6 +62,21 @@ const CartPage = () => {
   const navigate = useNavigate();
   const { cart, isLoading, error, updateQuantity, removeItem } = useCart();
 
+  const [open, setOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+
+  // Handle opening the Confirm Delete Modal
+  const handleOpenDeleteModal = (id) => {
+    setSelectedProductId(id);
+    setOpen(true);
+  };
+
+  // Handle closing the Confirm Delete Modal
+  const handleCloseDeleteModal = () => {
+    setOpen(false);
+    setSelectedProductId(null);
+  };
+
   // Handle quantity change
   const handleQuantityChange = (product, amount) => {
     updateQuantity({
@@ -68,9 +86,16 @@ const CartPage = () => {
   };
 
   // Handle removing an item from the cart
-  const handleRemoveItem = (id) => {
-    removeItem(id);
+  const handleConfirmDelete = () => {
+    removeItem(selectedProductId);
+    handleCloseDeleteModal();
   };
+
+  // Navigate to product details
+  const handleProductDetails = (product) => {
+    navigate(`/product-details`, { state: product });
+  };
+
   // Loading and error states
   if (isLoading) {
     return (
@@ -102,9 +127,6 @@ const CartPage = () => {
       </Container>
     );
   }
-  const handleProductDetails=(product)=>{
-    navigate(`/product-details`, { state: product })
-  }
 
   return (
     <Container maxWidth="md" sx={{ my: 4 }}>
@@ -118,8 +140,8 @@ const CartPage = () => {
               key={product._id}
               product={product}
               onQuantityChange={handleQuantityChange}
-              onRemoveItem={handleRemoveItem}
-              onNavigate={()=>handleProductDetails(product)}
+              onRemoveItem={handleOpenDeleteModal}
+              onNavigate={() => handleProductDetails(product)}
             />
           ))}
         </Grid>
@@ -134,6 +156,12 @@ const CartPage = () => {
           </Typography>
         </Box>
       </Paper>
+
+      <ConfirmDeleteModal
+        open={open}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+      />
     </Container>
   );
 };

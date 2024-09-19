@@ -28,7 +28,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories, fetchProducts } from "../../global/slice";
 import FilterProducts from "./FilterProducts";
 import { Debouncing } from "../../utills/Debouncing";
-import { useTheme } from "@mui/material/styles";
 
 // Star Rating Component
 const SelectRating = ({ rating }) => {
@@ -62,13 +61,14 @@ const SelectRating = ({ rating }) => {
 
 const Products = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
-  console.log(theme.spacing(2));
   const { addCart, cart } = useCart();
   const dispatch = useDispatch();
   const [inputVal, setInputVal] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
-
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions,setSuggestions]=useState([])
+  
   // Fetch state data from the Redux store
   const {
     user,
@@ -89,6 +89,10 @@ const Products = () => {
       dispatch(fetchCategories());
     }
   }, [dispatch, products.length, categories.length]);
+   // Set suggestions once products are fetched
+   useEffect(() => {
+    setSuggestions(products.map((product) => product?.title));
+  }, [products]);
 
   // Navigate to product details page
   const handleProductDetails = (product) => {
@@ -100,9 +104,22 @@ const Products = () => {
     await addCart(product);
   };
 
-  // Handle input change for search
   const handleChange = (e) => {
-    setInputVal(e.target.value);
+    const value = e.target.value;
+    setInputVal(value);
+
+    // Filter the suggestions based on input
+    const filtered = suggestions.filter((suggestion) =>
+      suggestion.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilteredSuggestions(filtered);
+    setShowSuggestions(true);
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setInputVal(suggestion);
+    setShowSuggestions(false);
   };
 
   // Debounced search function
@@ -173,7 +190,7 @@ const Products = () => {
     <Container maxWidth="lg" sx={{ mt: 2 }}>
       <Grid container spacing={2}>
         {/* Categories Navigation */}
-        <Grid item xs={4} md={2}>
+        <Grid item xs={12} md={2}>
           <FilterProducts
             categories={filteredCategories}
             onFilterChange={handleFilterChange}
@@ -181,59 +198,46 @@ const Products = () => {
         </Grid>
 
         {/* Product Grid */}
-        <Grid item xs={8} md={10}>
+        <Grid item xs={12} md={10}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <TextField
-                placeholder="Search Products"
-                onChange={handleChange}
-                value={inputVal}
-                fullWidth
-                variant="outlined"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton edge="start" size="small">
-                        <Search />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      {inputVal && (
-                        <IconButton
-                          onClick={() => setInputVal("")}
-                          edge="end"
-                          size="small"
-                          aria-label="clear input"
+              <label className="relative block w-full">
+                <div className="absolute inset-y-0 left-4 flex items-center pr-1 border-r">
+                  <Search className="text-gray-500 text-2xl cursor-pointer hover:text-indigo-500 transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  className="w-full px-14 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-300"
+                  placeholder="Search for products..."
+                  aria-label="Search"
+                  value={inputVal}
+                  onChange={handleChange}
+                />
+                {showSuggestions && inputVal && (
+                  <ul style={{zIndex:99}} className="absolute w-full mt-2 bg-[#ffffff] border border-gray-300 rounded-lg shadow-lg">
+                    {filteredSuggestions.length > 0 ? (
+                      filteredSuggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                          onClick={() => handleSuggestionClick(suggestion)}
                         >
-                          <CancelOutlined />
-                        </IconButton>
-                      )}
-                    </InputAdornment>
-                  ),
-                  classes: {
-                    notchedOutline: "ring-[#656565]", // Custom styling, if needed
-                  },
-                  sx: {
-                    paddingRight: 0, // Adjusts padding to better fit the icon
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#656565",
-                    },
-                  },
-                  fontFamily: "inherit",
-                  transition: "duration-500",
-                  background: "transparent",
-                  borderRadius: "4px",
-                  "& input": {
-                    padding: 1, // Removes extra padding from input
-                  },
-                }}
-              />
+                          {suggestion}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-4 py-2 text-gray-600">
+                        No suggestions available
+                      </li>
+                    )}
+                  </ul>
+                )}
+                {inputVal && (
+                  <div className="absolute inset-y-0 right-4 flex items-center">
+                    <CancelOutlined onClick={()=>setInputVal('')} className="text-gray-500 text-xl cursor-pointer hover:text-red-500 transition-colors" />
+                  </div>
+                )}
+              </label>
             </Grid>
             {inputVal && (
               <Grid item xs={12}>
@@ -243,7 +247,7 @@ const Products = () => {
                 </h2>
               </Grid>
             )}
-            {filteredProducts?.map((product) => (
+            {filteredProducts?.map((product,index) => (
               <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
                 <Card
                   sx={{
@@ -257,9 +261,12 @@ const Products = () => {
                     padding: 1,
                     backgroundColor: "rgba(0,0,0,0.15)",
                     mb: 1,
-                    aspectRatio: 5 / 6,
+                    height: 350,
                   }}
-                  className="group"
+                  className="group animate-slideUp"
+                  style={{
+                    animationTimeline: "view()",
+                  }}
                 >
                   <CardMedia
                     onClick={() => handleProductDetails(product)}
