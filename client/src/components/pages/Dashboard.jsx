@@ -67,7 +67,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-700 to-slate-200">
+      <div className="relative overflow-hidden  bg-gradient-to-r from-slate-700 to-slate-200">
         <main className="m-4 px-4 p-4">
           <div className="sm:text-center lg:text-left">
             <h1 className="animation text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
@@ -76,7 +76,7 @@ const HomePage = () => {
               </span>{" "}
               <span className="block xl:inline product">Products</span>
             </h1>
-            <p className="animation mt-3 text-base text-gray-400 sm:mt-5 sm:text-lg sm:max-w-lg sm:mx-auto md:mt-5 md:text-md lg:mx-0">
+            <p className="animation mt-3 text-base text-[#bebdbd] sm:mt-5 sm:text-lg sm:max-w-lg sm:mx-auto md:mt-5 md:text-md lg:mx-0">
               Explore our wide range of high-quality products at unbeatable
               prices. Start shopping now and elevate your lifestyle!
             </p>
@@ -152,21 +152,17 @@ const HomePage = () => {
         <h2 className="text-3xl font-extrabold text-gray-900 mb-8">
           Featured Products
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {featuredProducts.map((product, index) => (
             <div
               key={product.id}
-              className="animate-slideUp bg-white p-2 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+              className="animate-slideUp grid grid-cols-2 bg-white p-2 rounded-lg shadow-md overflow-hidden"
               style={{
                 animationDelay: `${index * 0.1}s`,
                 animationTimeline: "view(block 50% 20%)",
               }}
             >
-              <img
-                src={product.image}
-                className="w-full h-48 object-cover rounded"
-              />
-              <div className="p-4">
+              <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900">
                   {product.name}
                 </h3>
@@ -186,6 +182,12 @@ const HomePage = () => {
                     {product.rating.toFixed(1)}
                   </span>
                 </div>
+              </div>
+              <div className="flex-1">
+                <img
+                  src={product.image}
+                  className="w-full h-48 object-cover rounded"
+                />
               </div>
             </div>
           ))}

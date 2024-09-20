@@ -34,6 +34,7 @@ const NavButton = styled(Button)(({ theme }) => ({
   marginRight: 1,
   position: "relative",
   fontFamily: theme?.typography?.fontFamily,
+  letterSpacing:0.5,
   "&:hover": {
     background: "none", // Ensuring no background color on hover
   },
@@ -97,7 +98,7 @@ function Header() {
   return (
     <Box
       sx={{ backgroundColor: `${theme?.palette?.secondary?.heading}` }}
-      className={`backdrop-blur-2xl text-[#fff]`}
+      className={`backdrop-blur-2xl text-[#fff] sticky top-0 z-[9] shadow-[0_0_1rem_#262626]`}
     >
       <Container maxWidth="lg">
         <Toolbar
