@@ -10,7 +10,7 @@ const Theme = createTheme({
     },
     secondary: {
       main: "#472a7cfd",
-      heading:"hsl(219,29%,62%)",
+      heading:"#4ade80",
       subHeading:"#7E5A9B"
     },
   },

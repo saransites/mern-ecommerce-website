@@ -12,6 +12,7 @@ import {
   Paper,
   TextField,
   CircularProgress,
+  useTheme,
 } from "@mui/material";
 import { Add, Remove, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -61,7 +62,7 @@ const CartItem = ({ product, onQuantityChange, onRemoveItem, onNavigate }) => {
 const CartPage = () => {
   const navigate = useNavigate();
   const { cart, isLoading, error, updateQuantity, removeItem } = useCart();
-
+  const theme=useTheme()
   const [open, setOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
@@ -130,7 +131,7 @@ const CartPage = () => {
 
   return (
     <Container maxWidth="md" sx={{ my: 4 }}>
-      <Paper elevation={3} sx={{ p: 4, background: "hsl(219,29%,62%)" }}>
+      <Paper elevation={3} sx={{ p: 4, background: `${theme?.palette?.secondary?.heading}` }}>
         <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold" }}>
           Shopping Cart Items
         </Typography>

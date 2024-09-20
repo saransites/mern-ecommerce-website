@@ -21,6 +21,7 @@ import {
   ShoppingBagOutlined,
   CancelOutlined,
   Search,
+  Cancel,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
@@ -67,8 +68,8 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestions,setSuggestions]=useState([])
-  
+  const [suggestions, setSuggestions] = useState([]);
+
   // Fetch state data from the Redux store
   const {
     user,
@@ -89,8 +90,8 @@ const Products = () => {
       dispatch(fetchCategories());
     }
   }, [dispatch, products.length, categories.length]);
-   // Set suggestions once products are fetched
-   useEffect(() => {
+  // Set suggestions once products are fetched
+  useEffect(() => {
     setSuggestions(products.map((product) => product?.title));
   }, [products]);
 
@@ -104,17 +105,24 @@ const Products = () => {
     await addCart(product);
   };
 
+  // Input Change Handler
   const handleChange = (e) => {
-    const value = e.target.value;
-    setInputVal(value);
+    const userInput = e.target.value;
 
-    // Filter the suggestions based on input
-    const filtered = suggestions.filter((suggestion) =>
-      suggestion.toLowerCase().includes(value.toLowerCase())
-    );
+    // Set the input value
+    setInputVal(userInput);
 
-    setFilteredSuggestions(filtered);
-    setShowSuggestions(true);
+    // Filter suggestions based on the current input
+    if (userInput) {
+      const filtered = suggestions.filter((suggestion) =>
+        suggestion.toLowerCase().includes(userInput.toLowerCase())
+      );
+      setFilteredSuggestions(filtered);
+      setShowSuggestions(true); // Always show suggestions when typing
+    } else {
+      setFilteredSuggestions([]);
+      setShowSuggestions(false); // Hide suggestions when input is cleared
+    }
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -186,6 +194,9 @@ const Products = () => {
     return <div>Error loading data: Please Try Again...</div>;
   }
 
+  const handleRemoveSuggestion = () => {
+    setShowSuggestions(false);
+  };
   return (
     <Container maxWidth="lg" sx={{ mt: 2 }}>
       <Grid container spacing={2}>
@@ -212,9 +223,13 @@ const Products = () => {
                   aria-label="Search"
                   value={inputVal}
                   onChange={handleChange}
+                  onBlur={() => setSuggestions([])}
                 />
                 {showSuggestions && inputVal && (
-                  <ul style={{zIndex:99}} className="absolute w-full mt-2 bg-[#ffffff] border border-gray-300 rounded-lg shadow-lg">
+                  <ul
+                    style={{ zIndex: 99 }}
+                    className="absolute w-full mt-2 bg-[#ffffff] border border-gray-300 rounded-lg shadow-lg"
+                  >
                     {filteredSuggestions.length > 0 ? (
                       filteredSuggestions.map((suggestion, index) => (
                         <li
@@ -230,11 +245,18 @@ const Products = () => {
                         No suggestions available
                       </li>
                     )}
+                    <Cancel
+                      onClick={handleRemoveSuggestion}
+                      className="absolute right-0 top-0 m-2"
+                    />
                   </ul>
                 )}
                 {inputVal && (
                   <div className="absolute inset-y-0 right-4 flex items-center">
-                    <CancelOutlined onClick={()=>setInputVal('')} className="text-gray-500 text-xl cursor-pointer hover:text-red-500 transition-colors" />
+                    <CancelOutlined
+                      onClick={() => setInputVal("")}
+                      className="text-gray-500 text-xl cursor-pointer hover:text-red-500 transition-colors"
+                    />
                   </div>
                 )}
               </label>
@@ -247,7 +269,7 @@ const Products = () => {
                 </h2>
               </Grid>
             )}
-            {filteredProducts?.map((product,index) => (
+            {filteredProducts?.map((product, index) => (
               <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
                 <Card
                   sx={{
@@ -265,7 +287,7 @@ const Products = () => {
                   }}
                   className="group animate-slideUp"
                   style={{
-                    animationTimeline: "view()",
+                    animationTimeline: "view(block 50% 10%)",
                   }}
                 >
                   <CardMedia
@@ -278,8 +300,6 @@ const Products = () => {
                       height: 150,
                       objectFit: "contain",
                       cursor: "pointer",
-                      borderTopLeftRadius: 8,
-                      borderTopRightRadius: 8,
                       filter: "brightness(90%) contrast(130%)",
                     }}
                     className="group-hover:-translate-y-2 transition-transform duration-500 mix-blend-multiply"

@@ -1,7 +1,8 @@
 import { useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Star } from '@mui/icons-material'
+import { ShoppingBagOutlined, Star } from "@mui/icons-material";
+import girl from "../../assets/surprised-happy-girl-pointing-left-recommend-product-advertisement.png";
 
 const HomePage = () => {
   const theme = useTheme();
@@ -66,50 +67,45 @@ const HomePage = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-6 xl:mt-28">
-              <div className="sm:text-center lg:text-left">
-                <h1 className="animation text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                  <span className="block xl:inline">Discover Amazing</span>{" "}
-                  <span
-                    style={{ color: `${theme.palette.secondary.subHeading}` }}
-                    className="block xl:inline"
-                  >
-                    Products
-                  </span>
-                </h1>
-                <p className="animation mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-lg sm:mx-auto md:mt-5 md:text-md lg:mx-0">
-                  Explore our wide range of high-quality products at unbeatable
-                  prices. Start shopping now and elevate your lifestyle!
-                </p>
-                <div className="animation mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                  <Link
-                    to="/products"
-                    className="px-10 py-2 md:py-4 block text-center text-[#fefefe] rounded-md hover:scale-[1.03] active:scale-90 transition duration-500 shadow-[1px_1px_5px_#262626]"
-                    style={{
-                      backgroundColor: `${theme.palette.secondary.subHeading}`,
-                    }}
-                  >
-                    Shop Now
-                  </Link>
-                </div>
-              </div>
-            </main>
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-700 to-slate-200">
+        <main className="m-4 px-4 p-4">
+          <div className="sm:text-center lg:text-left">
+            <h1 className="animation text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+              <span className="block xl:inline text-green-400">
+                Discover Amazing
+              </span>{" "}
+              <span className="block xl:inline product">Products</span>
+            </h1>
+            <p className="animation mt-3 text-base text-gray-400 sm:mt-5 sm:text-lg sm:max-w-lg sm:mx-auto md:mt-5 md:text-md lg:mx-0">
+              Explore our wide range of high-quality products at unbeatable
+              prices. Start shopping now and elevate your lifestyle!
+            </p>
+            <div className="animation mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+              <Link
+                to="/products"
+                className="px-10 py-2 md:py-4 block text-center text-gray-100 rounded-full
+               hover:shadow-[0_0_15px_rgba(0,0,0,0.6)] hover:bg-opacity-80 
+               active:scale-95 transition-all duration-300 ease-in-out
+               backdrop-blur-xl shadow-[1px_1px_10px_rgba(24,32,23,0.9)] 
+               bg-gradient-to-r from-green-400 font-semibold to-green-600"
+              >
+               <ShoppingBagOutlined  className="mr-1 w-5 h-5 text-black"/>
+                Shop Now
+              </Link>
+            </div>
           </div>
-        </div>
+        </main>
         <div className="imgAnimate lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
           <img
-            className="max-w-full h-auto object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
-            src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"
-            alt=""
+            className="max-w-full h-auto object-cover"
+            src={girl}
+            alt="girl"
           />
         </div>
       </div>
 
       {/* Category Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-4">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-8">
           Shop by Category
         </h2>
@@ -120,7 +116,7 @@ const HomePage = () => {
               className={`relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 animate-slideUp`}
               style={{
                 animationDelay: `${index * 0.1}s`,
-                animationTimeline: "view()",
+                animationTimeline: "view(block 50% 20%)",
               }}
             >
               <img
@@ -136,6 +132,19 @@ const HomePage = () => {
             </div>
           ))}
         </div>
+        <div
+          className="mt-4 grid place-content-center animate-slideUp"
+          style={{
+            animationTimeline: "view()",
+          }}
+        >
+          <Link
+            to="/products"
+            className="ring-2 ring-[#282929] p-2 px-6 rounded hover:ring-4 transition duration-300"
+          >
+            View All
+          </Link>
+        </div>
       </div>
 
       {/* Featured Products Section */}
@@ -150,7 +159,7 @@ const HomePage = () => {
               className="animate-slideUp bg-white p-2 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
               style={{
                 animationDelay: `${index * 0.1}s`,
-                animationTimeline: "view()",
+                animationTimeline: "view(block 50% 20%)",
               }}
             >
               <img
@@ -189,7 +198,7 @@ const HomePage = () => {
         >
           <Link
             to="/products"
-            className="ring p-2 px-6 rounded hover:scale-[1.02] transition duration-300"
+            className="ring-2 ring-[#282929] p-2 px-6 rounded hover:ring-4 transition duration-300"
           >
             View All
           </Link>
