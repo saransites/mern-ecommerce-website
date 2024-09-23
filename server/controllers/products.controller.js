@@ -1,8 +1,7 @@
 // routes/cartRoutes.js
 const express = require("express");
 const Cart = require("../models/cartModal");
-
-const router = express.Router();
+const Orders = require("../models/ordersModal");
 
 // Get cart for a user
 const getCart = async (req, res) => {
@@ -140,8 +139,101 @@ const removeCart = async (req, res) => {
     // Respond with the updated cart
     res.json(cart);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+const getOrders = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    // Await the result of the query
+    const orders = await Orders.findOne({ userId });
+
+    // Check if orders were found
+    if (!orders) {
+      return res
+        .status(404)
+        .json({ message: "No orders found for this user." });
+    }
+
+    res.status(200).json(orders);
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+const addOrders = async (req, res) => {
+  const {
+    title,
+    description,
+    price,
+    paymentMethod,
+    category,
+    image,
+    name,
+    address,
+    email,
+    phone,
+    city,
+    state,
+    zipCode,
+    quantity,
+    color,
+    size,
+  } = req.body;
+
+  const { rate } = req.body.rating; // Assuming this is passed in the request body
+
+  const { userId } = req.params; // Getting userId from URL params
+
+  try {
+    // Create order items array
+    const orderItems = [
+      {
+        title,
+        description,
+        price,
+        quantity,
+        size,
+        color,
+        image,
+        rate
+      },
+    ];
+
+    // Calculate total amount
+    const totalAmount = price * quantity;
+
+    // Create order object
+    const order = new Orders({
+      userId,
+      items: orderItems,
+      totalAmount,
+      orderDate: new Date(),
+      status: "Pending",
+      paymentMethod,
+      shippingAddress: {
+        name,
+        addressLine1: address,
+        city,
+        state,
+        zipCode,
+        country: "india", // You can adjust this based on your requirements
+      },
+    });
+
+    // Save the order to the database
+    await order.save();
+
+    // Return success response
+    res.status(201).json({ message: "Order created successfully", order });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "Failed to create order", error: err.message });
   }
 };
 
@@ -150,4 +242,6 @@ module.exports = {
   addCart,
   removeCart,
   updateCart,
+  addOrders,
+  getOrders,
 };

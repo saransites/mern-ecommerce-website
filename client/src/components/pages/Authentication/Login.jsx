@@ -141,11 +141,12 @@ const Login = () => {
             </Grid>
 
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'end', mt: 1 }}>
-              <Typography variant="body2" component={Link} to="/signup" sx={{ textDecoration: 'none', color: '#252525' }}>
-                Do not have an account?
+              <Typography variant="body2" component={Link} to="/signup" sx={{ textDecoration: 'none' }} className='text-[#10657e]'>
+                Do not have an account? Signup
               </Typography>
             </Grid>
           </Grid>
+              <Link to='/admin/login' className='text-end text-sm'>Login As Admin</Link>
         </Box>
       </Box>
     </Box>

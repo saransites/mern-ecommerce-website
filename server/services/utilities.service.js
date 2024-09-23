@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const createJWT = (data) => {
-  return jwt.sign({ data: data }, process.env.JWT_SECRET, {
+  return jwt.sign({ data }, process.env.JWT_SECRET, {
     expiresIn: 60 * 60 * 24 * 20,
   });
 };

@@ -108,25 +108,25 @@ const CartPage = () => {
       </Container>
     );
   }
-
   if (error) {
-    return (
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Typography color="error">
-          Failed to load cart items. Please try again later.
-        </Typography>
-      </Container>
-    );
-  }
-
-  if (!cart?.items?.length) {
-    return (
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Typography color="text.secondary">
-          Cart is empty...please add a product.
-        </Typography>
-      </Container>
-    );
+    // Check if error.response and error.response.status exist
+    if (error.response?.status === 404) {
+      return (
+        <Container maxWidth="md" sx={{ mt: 4 }}>
+          <Typography color="text.secondary">
+            Cart is empty...please add a product.
+          </Typography>
+        </Container>
+      );
+    } else {
+      return (
+        <Container maxWidth="md" sx={{ mt: 4 }}>
+          <Typography color="error">
+            Failed to load cart items. Please try again later.
+          </Typography>
+        </Container>
+      );
+    }
   }
 
   return (

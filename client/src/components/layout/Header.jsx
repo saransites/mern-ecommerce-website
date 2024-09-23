@@ -34,7 +34,7 @@ const NavButton = styled(Button)(({ theme }) => ({
   marginRight: 1,
   position: "relative",
   fontFamily: theme?.typography?.fontFamily,
-  letterSpacing:0.5,
+  letterSpacing: 0.5,
   "&:hover": {
     background: "none", // Ensuring no background color on hover
   },
@@ -221,13 +221,14 @@ function Header() {
                   horizontal: "right",
                 }}
               >
-                <MenuItem onClick={handleAvatarClose}>
-                  <Typography variant="body1">
-                    Signed in as{" "}
-                    <strong>{user?.firstName + " " + user?.lastName}</strong>
-                  </Typography>
+                <MenuItem>
+                  <Link to={`/${user?.firstName + user?.lastName}`} className="flex items-center">
+                    <IconButton>
+                      <Avatar sx={{ width: 30, height: 30 }} />
+                    </IconButton>
+                    <Typography>Profile</Typography>
+                  </Link>
                 </MenuItem>
-                <Divider />
                 <MenuItem onClick={() => navigate("/cartpage")}>
                   <IconButton>
                     <AddShoppingCart />

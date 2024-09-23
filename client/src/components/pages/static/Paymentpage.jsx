@@ -17,8 +17,11 @@ import bg5 from "../../../assets/9.jpeg";
 import visa from "../../../assets/visa.png";
 import chip from "../../../assets/chip.png";
 import { toast } from "react-toastify";
+import { UseApi } from "../../global/slice";
+import { useSelector } from "react-redux";
 
 const CreditCardForm = () => {
+  const { user } = useSelector((state) => state.data);
   const [bgImage, setBgImage] = useState("");
   const [formData, setFormData] = useState({
     cardNumber: "",
@@ -35,6 +38,7 @@ const CreditCardForm = () => {
   const product = location.state;
   const cardRef = useRef(null);
   const theme = useTheme();
+  const api = UseApi();
 
   useEffect(() => {
     if (!product) navigate("/");
@@ -64,12 +68,22 @@ const CreditCardForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success("Payment added successfully");
-    navigate("/order-confirmation/product", {
-      state: { ...formData, ...product },
-    });
+    try {
+      const res = await api.post(`/cart/orders/${user?._id}`, {
+        ...formData,
+        ...product,
+      });
+      if (res.status === 201) {
+        toast.success("Payment added successfully");
+        navigate("/order-confirmation/product", {
+          state: { ...formData, ...product },
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -112,7 +126,8 @@ const CreditCardForm = () => {
                   }}
                 />
                 <div className="text-[#fff] absolute top-[40%] left-4">
-                  {formatCardNumber(formData.cardNumber) || "#### #### #### ####"}
+                  {formatCardNumber(formData.cardNumber) ||
+                    "#### #### #### ####"}
                 </div>
                 <CardMedia
                   component="img"
@@ -127,8 +142,12 @@ const CreditCardForm = () => {
                 />
               </div>
               <div className="text-[#fff] absolute bottom-4 left-4">
-                <span className="text-[#ffffff82] text-[0.7rem]">Card holder</span>
-                <p className="text-[1rem]">{formData.cardHolder || "YOUR NAME"}</p>
+                <span className="text-[#ffffff82] text-[0.7rem]">
+                  Card holder
+                </span>
+                <p className="text-[1rem]">
+                  {formData.cardHolder || "YOUR NAME"}
+                </p>
               </div>
               <div className="text-[#fff] absolute bottom-4 right-4">
                 <span className="text-[#ffffff82] text-[0.7rem]">Expires</span>
@@ -160,7 +179,11 @@ const CreditCardForm = () => {
                 className="w-[95%] p-1 rounded outline-none text-[#262626] font-bold"
                 maxLength={3}
               />
-              <img src={visa} className="w-20 absolute right-0 bottom-0" alt="Visa Logo" />
+              <img
+                src={visa}
+                className="w-20 absolute right-0 bottom-0"
+                alt="Visa Logo"
+              />
             </div>
           </div>
           <form className="mt-3" onSubmit={handleSubmit}>

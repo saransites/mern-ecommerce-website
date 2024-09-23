@@ -89,7 +89,7 @@ const HomePage = () => {
                backdrop-blur-xl shadow-[1px_1px_10px_rgba(24,32,23,0.9)] 
                bg-gradient-to-r from-green-400 font-semibold to-green-600"
               >
-               <ShoppingBagOutlined  className="mr-1 w-5 h-5 text-black"/>
+                <ShoppingBagOutlined className="mr-1 w-5 h-5 text-black" />
                 Shop Now
               </Link>
             </div>
@@ -116,7 +116,8 @@ const HomePage = () => {
               className={`relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 animate-slideUp`}
               style={{
                 animationDelay: `${index * 0.1}s`,
-                animationTimeline: "view(block 50% 20%)",
+                animationTimeline: "view()",
+                 animationRange:"entry"
               }}
             >
               <img
@@ -159,10 +160,11 @@ const HomePage = () => {
               className="animate-slideUp grid grid-cols-2 bg-white p-2 rounded-lg shadow-md overflow-hidden"
               style={{
                 animationDelay: `${index * 0.1}s`,
-                animationTimeline: "view(block 50% 20%)",
+                animationTimeline: "view()",
+                animationRange:"entry"
               }}
             >
-              <div className="flex-1">
+              <div>
                 <h3 className="text-lg font-semibold text-gray-900">
                   {product.name}
                 </h3>
@@ -183,7 +185,7 @@ const HomePage = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex-1">
+              <div>
                 <img
                   src={product.image}
                   className="w-full h-48 object-cover rounded"

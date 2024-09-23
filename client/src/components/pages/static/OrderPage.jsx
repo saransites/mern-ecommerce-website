@@ -80,7 +80,7 @@ const OrderPage = () => {
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Card sx={{ display: "flex", flexDirection: "column" }}>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardMedia
                 component="img"
                 image={selectedProduct?.image}
@@ -95,7 +95,7 @@ const OrderPage = () => {
                   ${selectedProduct?.price}
                 </Typography>
               </CardContent>
-            </Card>
+            </Box>
           </Grid>
           <Grid item xs={12} md={6}>
             <Box component="form" onSubmit={handleSubmit}>

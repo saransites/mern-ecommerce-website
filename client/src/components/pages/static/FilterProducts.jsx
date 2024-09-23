@@ -28,9 +28,9 @@ const FilterSection = styled(Box)(({ theme }) => ({
   backgroundColor: theme?.palette?.grey[400],
   borderRadius: theme?.shape?.borderRadius,
   boxShadow: theme?.shadows[1],
-  position: 'sticky', // Ensures sticky behavior
-  top: theme.spacing(2), // Distance from the top of the viewport
-  zIndex: 1, // Ensures it stays on top when sticking
+  position: 'sticky',
+  top: theme.spacing(8),
+  zIndex: 1,
 }));
 
 const FilterTitle = styled(Typography)(({ theme }) => ({

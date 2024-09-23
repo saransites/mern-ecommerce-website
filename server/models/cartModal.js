@@ -45,19 +45,22 @@ const CartItemSchema = new mongoose.Schema({
   },
 });
 
-const CartSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Assuming you have a User model
-    required: true,
+const CartSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Assuming you have a User model
+      required: true,
+    },
+    items: [CartItemSchema],
+    totalAmount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
-  items: [CartItemSchema],
-  totalAmount: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-});
+  { timestamps: true }
+);
 
 const Cart = mongoose.model("Cart", CartSchema);
 
