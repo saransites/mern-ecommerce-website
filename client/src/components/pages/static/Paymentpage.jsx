@@ -75,7 +75,7 @@ const CreditCardForm = () => {
         ...formData,
         ...product,
       });
-      if (res.status === 201) {
+      if (res.status === 201 || res.status === 200) {
         toast.success("Payment added successfully");
         navigate("/order-confirmation/product", {
           state: { ...formData, ...product },
@@ -83,6 +83,7 @@ const CreditCardForm = () => {
       }
     } catch (err) {
       console.error(err);
+      toast.error('something went wrong')
     }
   };
 

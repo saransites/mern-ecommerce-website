@@ -34,6 +34,10 @@ const Login = () => {
     },
     onError: (error) => {
       console.error('Login failed:', error);
+      if (error?.response?.status === 401) {
+        Popup("error", error?.response?.data?.message);
+        return;
+      }
       Popup('error', 'Something went wrong... please try again later');
     },
   });

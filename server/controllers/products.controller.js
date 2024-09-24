@@ -146,11 +146,11 @@ const removeCart = async (req, res) => {
 const getOrders = async (req, res) => {
   const { userId } = req.params;
   try {
-    // Await the result of the query
-    const orders = await Orders.findOne({ userId });
-
-    // Check if orders were found
-    if (!orders) {
+    // Retrieve all orders for the given userId
+    const orders = await Orders.find({ userId }); // Changed from findOne to find
+    console.log(orders)
+    // Check if any orders were found
+    if (!orders || orders.length === 0) {
       return res
         .status(404)
         .json({ message: "No orders found for this user." });
@@ -165,6 +165,7 @@ const getOrders = async (req, res) => {
 
 
 const addOrders = async (req, res) => {
+  
   const {
     title,
     description,
@@ -185,57 +186,85 @@ const addOrders = async (req, res) => {
   } = req.body;
 
   const { rate } = req.body.rating; // Assuming this is passed in the request body
-
   const { userId } = req.params; // Getting userId from URL params
 
   try {
-    // Create order items array
-    const orderItems = [
-      {
-        title,
-        description,
-        price,
-        quantity,
-        size,
-        color,
-        image,
-        rate
-      },
-    ];
+    // Find if the user already has an order
+    let existingOrder = await Orders.findOne({ userId, status: "Pending" });
 
-    // Calculate total amount
-    const totalAmount = price * quantity;
+    const newOrderItem = {
+      title,
+      description,
+      price,
+      quantity,
+      size,
+      color,
+      image,
+      rate,
+    }
 
-    // Create order object
-    const order = new Orders({
-      userId,
-      items: orderItems,
-      totalAmount,
-      orderDate: new Date(),
-      status: "Pending",
-      paymentMethod,
-      shippingAddress: {
-        name,
-        addressLine1: address,
-        city,
-        state,
-        zipCode,
-        country: "india", // You can adjust this based on your requirements
-      },
-    });
+    // Calculate total amount for this item
+    const itemTotalAmount = price * quantity;
 
-    // Save the order to the database
-    await order.save();
+    // If the user has an existing order
+    if (existingOrder) {
+      // Check if the same product exists in the order items
+      const existingItemIndex = existingOrder.items.findIndex(
+        (item) =>
+          item.title === title && item.color === color && item.size === size
+      );
 
-    // Return success response
-    res.status(201).json({ message: "Order created successfully", order });
+      if (existingItemIndex !== -1) {
+        // If the product exists, update the quantity and price
+        existingOrder.items[existingItemIndex].quantity += quantity;
+        existingOrder.items[existingItemIndex].price += itemTotalAmount;
+      } else {
+        // If the product doesn't exist, add it as a new item
+        existingOrder.items.push(newOrderItem);
+      }
+
+      // Update the total amount of the order
+      existingOrder.totalAmount += itemTotalAmount;
+
+      // Save the updated order
+      await existingOrder.save();
+      res
+        .status(200)
+        .json({ message: "Order updated successfully", order: existingOrder });
+    } else {
+      // If no existing order, create a new order
+      const orderItems = [newOrderItem];
+
+      // Create a new order object
+      const order = new Orders({
+        userId,
+        items: orderItems,
+        totalAmount: itemTotalAmount,
+        orderDate: new Date(),
+        status: "Pending",
+        paymentMethod,
+        shippingAddress: {
+          name,
+          addressLine1: address,
+          city,
+          state,
+          zipCode,
+          country: "India", // Adjust based on your requirements
+        },
+      });
+
+      // Save the new order to the database
+      await order.save();
+      res.status(201).json({ message: "Order created successfully", order });
+    }
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res
       .status(500)
       .json({ message: "Failed to create order", error: err.message });
   }
 };
+
 
 module.exports = {
   getCart,

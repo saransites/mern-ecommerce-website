@@ -24,7 +24,6 @@ const AdminSignup = () => {
     e.preventDefault();
     try {
       const res = await api.post("/admin/signup", FormData);
-      console.log(res)
       if (res.status === 201) {
         navigate("/admin/login");
         Popup('success',res.data.message)

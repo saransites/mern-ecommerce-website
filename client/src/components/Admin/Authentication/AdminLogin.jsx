@@ -28,6 +28,7 @@ const AdminLogin = () => {
         Popup("error", error?.response?.data?.message);
         return;
       }
+      
       setError("Invalid email or password");
     }
   };

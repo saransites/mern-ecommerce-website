@@ -11,8 +11,6 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
-  Modal,
-  TextField,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate, useParams } from "react-router-dom";
@@ -65,33 +63,52 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const ProfilePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { username } = useParams();
+  const { _id: id } = useParams();
   const { user } = useSelector((state) => state.data);
   const api = UseApi();
-  const [modalOpen,setModalOpen]=useState(false)
+  const [modalOpen, setModalOpen] = useState(false);
 
   const fetchOrderDetails = async (userId) => {
     const { data } = await api.get(`/cart/orders/${userId}`);
     return data;
   };
 
+  const fetchUserDetails = async (id) => {
+    const { data: userData } = await api.get(`/auth/user/${id}`);
+    return userData;
+  };
+
   useEffect(() => {
-    if (!username) {
+    if (!id) {
       navigate("/");
     }
-  }, [navigate]);
+  }, [id, navigate]);
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["orderDetails", user?._id],
-    queryFn: () => fetchOrderDetails(user?._id),
-    enabled: !!user?._id,
+  const {
+    data: orderData,
+    error: orderError,
+    isLoading: isOrderLoading,
+  } = useQuery({
+    queryKey: ["orderDetails", id],
+    queryFn: () => fetchOrderDetails(id),
+    enabled: !!id,
+  });
+
+  const {
+    data: userData,
+    error: userError,
+    isLoading: isUserLoading,
+  } = useQuery({
+    queryKey: ["userDetails", id],
+    queryFn: () => fetchUserDetails(id),
+    enabled: !!id,
   });
 
   const handleSave = (updatedUser) => {
     dispatch(setUser(updatedUser));
   };
 
-  if (isLoading) {
+  if (isUserLoading) {
     return (
       <Box
         display="flex"
@@ -104,6 +121,44 @@ const ProfilePage = () => {
     );
   }
 
+  if (userError) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography color="error">Error loading data</Typography>
+      </Box>
+    );
+  }
+
+  const renderOrderHistory = () => {
+    if (!orderData || orderData.length === 0) {
+      return <Typography>No Orders Found</Typography>;
+    }
+
+    // Ensure `orderData` is an array to handle multiple orders
+    const orders = Array.isArray(orderData) ? orderData : [orderData];
+
+    return orders.map((order, index) => (
+      <Grid item xs={12} key={index}>
+        <SectionTitle variant="h6">Order History</SectionTitle>
+        <List>
+          {order.items.map((item, itemIndex) => (
+            <ListItem key={itemIndex}>
+              <ListItemText
+                primary={item.title}
+                secondary={`Quantity: ${item.quantity} - $${item.price}`}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Grid>
+    ));
+  };
+
   return (
     <Root>
       <ProfileCard>
@@ -111,18 +166,24 @@ const ProfilePage = () => {
           <Grid container spacing={3} alignItems="center">
             {/* Profile Section */}
             <Grid item xs={12} md={4}>
-              <Box display="flex" flexDirection='column' alignItems='center'>
-                  <ProfileAvatar alt="User Avatar" src={profile} />
-                  <Typography variant="h5">{username}</Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {user?.email}
-                  </Typography>
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <ProfileAvatar alt="User Avatar" src={profile} />
+                <Typography variant="h5">
+                  {userData?.firstName + " " + userData?.lastName}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {userData?.email}
+                </Typography>
+                {user?.role === "user" && (
                   <StyledButton
                     variant="contained"
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => {
+                      setModalOpen(true);
+                    }}
                   >
                     Edit Profile
                   </StyledButton>
+                )}
               </Box>
             </Grid>
 
@@ -131,60 +192,42 @@ const ProfilePage = () => {
               <SectionTitle variant="h6">Account Information</SectionTitle>
               <Typography variant="body1" gutterBottom>
                 <strong>Member since:</strong>{" "}
-                {moment(user?.createdAt).format("MMMM Do, YYYY")}
+                {moment(userData?.createdAt).format("MMMM Do, YYYY")}
               </Typography>
-              {data && (
-                <>
-                  <Typography variant="body1" gutterBottom>
-                    <strong>Last Order Date:</strong>{" "}
-                    {moment(data?.orderDate).format("MMMM Do, YYYY")}
-                  </Typography>
-                </>
+              {orderData && (
+                <Typography variant="body1" gutterBottom>
+                  <strong>Last Order Date:</strong>{" "}
+                  {moment(orderData?.orderDate).format("MMMM Do, YYYY")}
+                </Typography>
               )}
 
               {/* Shipping Address */}
               <SectionTitle variant="h6">Address</SectionTitle>
               <List>
-                <ListItem>
-                  <ListItemText
-                    primary={`${data?.shippingAddress?.name}`}
-                    secondary={`${data?.shippingAddress?.addressLine1}, ${data?.shippingAddress?.city}, ${data?.shippingAddress?.state}, ${data?.shippingAddress?.zipCode}, ${data?.shippingAddress?.country}`}
-                  />
-                </ListItem>
+                {userData?.address ? (
+                  <ListItem>
+                    <ListItemText
+                      primary={`${userData?.address || "No Address Found"}`}
+                    />
+                  </ListItem>
+                ) : (
+                  <ListItem>
+                    <Typography variant="body2">
+                      {orderData?.shippingAddress?.city},{" "}
+                      {orderData?.shippingAddress?.state}
+                    </Typography>
+                  </ListItem>
+                )}
               </List>
             </Grid>
           </Grid>
 
           {/* Order History Section */}
           <Grid container spacing={3} marginTop={4}>
-            {data ? (
-              <Grid item xs={12}>
-                <SectionTitle variant="h6">Order History</SectionTitle>
-                <List>
-                  {data.items.map((item, index) => (
-                    <ListItem key={index}>
-                      <ListItemText
-                        primary={item.title}
-                        secondary={`Quantity: ${item.quantity} - $${item.price}`}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
-            ) : (
-              <Grid item xs={12}>
-                <Typography>No Orders Found</Typography>
-              </Grid>
-            )}
+            {renderOrderHistory()}
           </Grid>
         </CardContent>
       </ProfileCard>
-      <EditProfileModal
-        open={modalOpen}
-        handleClose={() => setModalOpen(false)}
-        user={user}
-        handleSave={handleSave}
-      />
     </Root>
   );
 };
@@ -256,7 +299,6 @@ const EditProfileModal = ({ open, handleClose, user, handleSave }) => {
         />
         <TextField
           label="Email"
-          type="email"
           name="email"
           fullWidth
           margin="normal"
@@ -271,8 +313,8 @@ const EditProfileModal = ({ open, handleClose, user, handleSave }) => {
           value={formData.address}
           onChange={handleInputChange}
         />
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Save Changes
+        <Button variant="contained" onClick={handleSubmit} sx={{ mt: 2 }}>
+          Save
         </Button>
       </Box>
     </Modal>

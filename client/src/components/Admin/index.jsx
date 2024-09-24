@@ -4,10 +4,10 @@ import { Box } from "@mui/material";
 
 const AdminIndex = () => {
   return (
-    <Box display="flex">
+    <Box display="flex" gap={3}>
       {/* Sidebar section */}
       <Box>
-        <AdminSidebar />{" "}
+        <AdminSidebar />
       </Box>
 
       {/* Main content section */}
@@ -18,6 +18,7 @@ const AdminIndex = () => {
           bgcolor: "#dad7d7",
           m: 2,
           borderRadius: "8px",
+          overflowX:"auto"
         }}
       >
         <Outlet />

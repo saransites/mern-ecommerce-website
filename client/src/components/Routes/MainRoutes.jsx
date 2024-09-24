@@ -19,6 +19,9 @@ import AdminDashboard from "../Admin/Dashboard";
 import AdminLogin from "../Admin/Authentication/AdminLogin";
 import AdminSignup from "../Admin/Authentication/AdminRegister";
 import ProfilePage from "../pages/static/ProfilePage";
+import AdminProducts from "../Admin/AdminProducts";
+import AdminOrders from "../Admin/AdminOrders";
+import AdminUsers from "../Admin/AdminUsers";
 
 const MainRoutes = () => {
   return (
@@ -60,8 +63,11 @@ const MainRoutes = () => {
         <Route path="/admin/signup" element={<AdminSignup />} />
         <Route path="/admin" element={<Protected Component={AdminIndex} />}>
           <Route index element={<AdminDashboard />} />
+          <Route path='/admin/products' element={<AdminProducts/>} />
+          <Route path='/admin/orders' element={<AdminOrders/>} />
+          <Route path='/admin/users' element={<AdminUsers/>} />
         </Route>
-        <Route path='/:username' element={<Protected Component={ProfilePage} />} />
+        <Route path='/:_id' element={<Protected Component={ProfilePage} />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
     </>
