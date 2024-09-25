@@ -56,9 +56,9 @@ const AdminOrders = () => {
 
   if (isLoading) {
     return (
-      <div>
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
         <CircularProgress />
-      </div>
+      </Box>
     );
   }
 

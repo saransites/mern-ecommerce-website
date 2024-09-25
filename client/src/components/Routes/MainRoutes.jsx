@@ -22,6 +22,7 @@ import ProfilePage from "../pages/static/ProfilePage";
 import AdminProducts from "../Admin/AdminProducts";
 import AdminOrders from "../Admin/AdminOrders";
 import AdminUsers from "../Admin/AdminUsers";
+import AdminAnalytics from "../Admin/AdminAnalytics";
 
 const MainRoutes = () => {
   return (
@@ -66,6 +67,7 @@ const MainRoutes = () => {
           <Route path='/admin/products' element={<AdminProducts/>} />
           <Route path='/admin/orders' element={<AdminOrders/>} />
           <Route path='/admin/users' element={<AdminUsers/>} />
+          <Route path='/admin/analytics' element={<AdminAnalytics/>} />
         </Route>
         <Route path='/:_id' element={<Protected Component={ProfilePage} />} />
         <Route path="*" element={<Notfound />} />

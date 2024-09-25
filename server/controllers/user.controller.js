@@ -1,4 +1,14 @@
 const User=require('../models/userModal')
+
+const getAllUsers=async(req,res)=>{
+  try{
+    const users=await User.find()
+    return res.status(200).json(users)
+  }catch(err){
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 const UserProfile = async (req, res) => {
   const { id } = req.params;
   try {
@@ -20,6 +30,7 @@ const UserProfile = async (req, res) => {
 
 
 
-module.exports={
-    UserProfile
-}
+module.exports = {
+  UserProfile,
+  getAllUsers,
+};

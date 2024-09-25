@@ -14,12 +14,21 @@ import {
   InputBase,
   useTheme,
 } from "@mui/material";
+import profile from "../../assets/307ce493-b254-4b2d-8ba4-d12c080d6651.jpg";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, setProducts } from "../global/slice";
-import { AddShoppingCart, Dashboard, LogoutOutlined, Search } from "@mui/icons-material";
+import {
+  AddShoppingCart,
+  Dashboard,
+  Inventory,
+  LogoutOutlined,
+  People,
+  Search,
+  ShoppingCart,
+} from "@mui/icons-material";
 import logo from "../../assets/logo.png";
 
 // Styled components using MUI's styled utility
@@ -224,10 +233,11 @@ function Header() {
                 {user?.role === "user" ? (
                   <>
                     <MenuItem>
-                      <Link
-                        to={`/${user?._id}`}
-                        className="flex items-center"
-                      >
+                      <img src={profile} width="50" height="50" />
+                      <strong>{user?.firstName + " " + user?.lastName}</strong>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link to={`/${user?._id}`} className="flex items-center">
                         <IconButton>
                           <Avatar sx={{ width: 30, height: 30 }} />
                         </IconButton>
@@ -243,14 +253,38 @@ function Header() {
                     </MenuItem>
                     <Divider />
                   </>
-                ) : (<>
-                <MenuItem onClick={() => navigate("/admin")}>
+                ) : (
+                  <>
+                    <MenuItem>
+                      <img src={profile} width="50" height="50" />
+                      <strong>{user?.name}</strong>
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate("/admin")}>
                       <IconButton>
                         <Dashboard />
                       </IconButton>
                       <Typography>Dashboard</Typography>
                     </MenuItem>
-                </>)}
+                    <MenuItem onClick={() => navigate("/admin.products")}>
+                      <IconButton>
+                        <Inventory />
+                      </IconButton>
+                      <Typography>Products</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate("/admin/orders")}>
+                      <IconButton>
+                        <ShoppingCart />
+                      </IconButton>
+                      <Typography>Orders</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate("/admin/users")}>
+                      <IconButton>
+                        <People />
+                      </IconButton>
+                      <Typography>Users</Typography>
+                    </MenuItem>
+                  </>
+                )}
                 <MenuItem onClick={handleLogout}>
                   <IconButton>
                     <LogoutOutlined />

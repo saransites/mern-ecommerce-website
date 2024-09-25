@@ -99,5 +99,85 @@ const OrdersData = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const analyticsData = async (req, res) => {
+  try {
+    // Get total users
+    const totalUsers = await User.countDocuments();
 
-module.exports = { dashboardData, addProducts, OrdersData };
+    // Get total orders
+    const totalOrders = await Order.countDocuments();
+
+    // Get total revenue
+    const totalRevenueData = await Order.aggregate([
+      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } },
+    ]);
+    const totalRevenue =
+      totalRevenueData.length > 0 ? totalRevenueData[0].totalRevenue : 0;
+
+    // Monthly user growth (assuming createdAt is available in User schema)
+    const userGrowth = await User.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: "$createdAt" },
+            year: { $year: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          month: {
+            $concat: [
+              { $toString: "$_id.month" },
+              "-",
+              { $toString: "$_id.year" },
+            ],
+          },
+          count: 1,
+          _id: 0,
+        },
+      },
+    ]).sort({ "_id.year": 1, "_id.month": 1 });
+
+    // Monthly order stats (assuming createdAt is available in Order schema)
+    const orderStats = await Order.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: "$createdAt" },
+            year: { $year: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          month: {
+            $concat: [
+              { $toString: "$_id.month" },
+              "-",
+              { $toString: "$_id.year" },
+            ],
+          },
+          count: 1,
+          _id: 0,
+        },
+      },
+    ]).sort({ "_id.year": 1, "_id.month": 1 });
+
+    res.json({
+      totalUsers,
+      totalOrders,
+      totalRevenue,
+      userGrowth,
+      orderStats,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch analytics data", error: err.message });
+  }
+};
+
+module.exports = { dashboardData, addProducts, OrdersData, analyticsData };

@@ -2,11 +2,10 @@ import {
   BarChart,
   Dashboard,
   Inventory,
-  MenuOpen,
-  People,
   ShoppingCart,
+  People,
+  MenuOpen,
 } from "@mui/icons-material";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
   Box,
   IconButton,
@@ -14,63 +13,68 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Menu,
 } from "@mui/material";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+
 // Sidebar items array with color and background
 const sidebarItems = [
   {
     label: "Dashboard",
     icon: <Dashboard />,
     link: "/admin",
-    bgColor: "#4caf50",
+    bgColor: "#0C7C59", // Green
     color: "#fff",
-  }, // Green
+  },
   {
     label: "Products",
     icon: <Inventory />,
     link: "/admin/products",
-    bgColor: "#2196f3",
-    color: "#fff",
-  }, // Blue
+    bgColor: "#2196f3", // Blue
+    color: "#fefefe",
+  },
   {
     label: "Orders",
     icon: <ShoppingCart />,
     link: "/admin/orders",
-    bgColor: "#ff9800",
+    bgColor: "#ff9800", // Orange
     color: "#fff",
-  }, // Orange
+  },
   {
     label: "Users",
     icon: <People />,
     link: "/admin/users",
-    bgColor: "#e91e63",
+    bgColor: "#e91e63", // Pink
     color: "#fff",
-  }, // Pink
+  },
   {
     label: "Analytics",
     icon: <BarChart />,
     link: "/admin/analytics",
-    bgColor: "#9c27b0",
+    bgColor: "#9c27b0", // Purple
     color: "#fff",
-  }, // Purple
+  },
 ];
-const AdminSidebar = () => {
-  const [open,setOpen]=useState(false)
 
+const AdminSidebar = ({ open, setOpen }) => {
+  const location = useLocation();
+  const { pathname } = location;
   return (
     <Box
       sx={{
-        width: open ? "60px" : "200px",
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        width: open ? "0px" : "180px", // Adjust width based on 'open' state
         transition: "width 0.3s",
-        ml: 2,
-        position:"relative"
+        overflow:"hidden",
+        backgroundColor: "#696773", // Sidebar background
+        backdropFilter:"blur(30px)",
+        position:"sticky",
+        top:56,
       }}
     >
-      <IconButton onClick={()=>setOpen(!open)} sx={{position:"absolute",top:'47.6%',translate:"-0% -50%",right:-38.3,zIndex:1,bgcolor:"#232313",'&:hover':{bgcolor:"#23231399"}}}>
-        <MenuIcon sx={{color:"#fefefe",fontSize:20}}/>
-      </IconButton>
+      {/* Sidebar List Items */}
       <List>
         {sidebarItems.map((item, index) => (
           <ListItem
@@ -78,24 +82,32 @@ const AdminSidebar = () => {
             to={item.link}
             key={index}
             sx={{
-              mb: 2,
-              bgcolor: item.bgColor, // Apply background color
+              m:1.2,
+              width:"fit-content",
+              bgcolor: pathname === item.link ? item.bgColor : "transparent", // Active background
+              color: pathname === item.link ? item.color : "#fff", // Active text color
               borderRadius: "8px",
-              color: item.color,
               "&:hover": {
+                bgcolor: item.bgColor,
                 opacity: 0.8,
               },
+              transition: "background-color 0.3s",
             }}
           >
             <ListItemIcon
               sx={{
-                color: open ? "#ffffff" : item.color, // Icon color
-                transition: "all 0.3s",
+                minWidth: "40px",
+                color: pathname === item.link ? item.color : "#fefefe", // Icon color
               }}
             >
               {item.icon}
             </ListItemIcon>
-            {!open && <ListItemText primary={item.label} />}
+            {open ? null : (
+              <ListItemText
+                primary={item.label}
+                sx={{ color: pathname === item.link ? item.color : "#fefefe" }}
+              />
+            )}
           </ListItem>
         ))}
       </List>

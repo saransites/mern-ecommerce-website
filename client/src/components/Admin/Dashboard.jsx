@@ -1,63 +1,90 @@
 import React from "react";
-import { Grid, Paper, Typography, CircularProgress } from "@mui/material";
+import { Grid, Paper, Typography, CircularProgress, Box } from "@mui/material";
 import { UseApi } from "../global/slice";
 import { useQuery } from "@tanstack/react-query";
 import { Line, Pie, Bar } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title } from 'chart.js';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+} from "chart.js";
 
 // Register Chart.js components
-ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title);
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title
+);
 
 const AdminDashboard = () => {
   const api = UseApi();
 
   const fetchingData = async () => {
-    const { data } = await api.get('/admin/api/dashboard');
+    const { data } = await api.get("/admin/api/dashboard");
     return data;
   };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['dashboardDetails'],
+    queryKey: ["dashboardDetails"],
     queryFn: () => fetchingData(),
   });
 
-  if (isLoading) return <CircularProgress />;
-  if (error) return <Typography>Error loading data</Typography>;
+  if (isLoading)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  if (error) return <Typography color="red">Error loading data</Typography>;
 
   // Data for the line chart (sales over time)
   const lineChartData = {
-    labels: data.salesOverTime.map(sale => sale.date),
+    labels: data.salesOverTime.map((sale) => sale.date),
     datasets: [
       {
-        label: 'Sales',
-        data: data.salesOverTime.map(sale => sale.total),
-        borderColor: 'rgba(75, 192, 192, 1)',
+        label: "Sales",
+        data: data.salesOverTime.map((sale) => sale.total),
+        borderColor: "rgba(75, 192, 192, 1)",
         fill: false,
-      }
+      },
     ],
   };
 
   // Data for the pie chart (orders vs users)
   const pieChartData = {
-    labels: ['Orders', 'Users'],
+    labels: ["Orders", "Users"],
     datasets: [
       {
         data: [data.totalOrders, data.totalUsers],
-        backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)'],
-      }
-    ]
+        backgroundColor: ["rgba(255, 99, 132, 0.6)", "rgba(54, 162, 235, 0.6)"],
+      },
+    ],
   };
 
   // Data for bar chart (top products)
   const barChartData = {
-    labels: data.topProducts.map(product => product.productName),
+    labels: data.topProducts.map((product) => product.productName),
     datasets: [
       {
-        label: 'Quantity Sold',
-        data: data.topProducts.map(product => product.totalSold),
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-      }
-    ]
+        label: "Quantity Sold",
+        data: data.topProducts.map((product) => product.totalSold),
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+      },
+    ],
   };
 
   return (
