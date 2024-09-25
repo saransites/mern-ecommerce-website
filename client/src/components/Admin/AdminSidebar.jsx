@@ -56,7 +56,7 @@ const sidebarItems = [
   },
 ];
 
-const AdminSidebar = ({ open, setOpen }) => {
+const AdminSidebar = ({ open }) => {
   const location = useLocation();
   const { pathname } = location;
   return (
@@ -67,11 +67,11 @@ const AdminSidebar = ({ open, setOpen }) => {
         height: "100vh",
         width: open ? "0px" : "180px", // Adjust width based on 'open' state
         transition: "width 0.3s",
-        overflow:"hidden",
+        overflow: "hidden",
         backgroundColor: "#696773", // Sidebar background
-        backdropFilter:"blur(30px)",
-        position:"sticky",
-        top:56,
+        backdropFilter: "blur(30px)",
+        position: "sticky",
+        top: 0,
       }}
     >
       {/* Sidebar List Items */}
@@ -82,9 +82,10 @@ const AdminSidebar = ({ open, setOpen }) => {
             to={item.link}
             key={index}
             sx={{
-              m:1.2,
-              width:"fit-content",
-              bgcolor: pathname === item.link ? item.bgColor : "transparent", // Active background
+              m: 1.2,
+              width: 160,
+              bgcolor:
+                pathname === item.link ? item.bgColor : "rgba(0,0,0,0.5)", // Active background
               color: pathname === item.link ? item.color : "#fff", // Active text color
               borderRadius: "8px",
               "&:hover": {

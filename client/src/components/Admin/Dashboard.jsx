@@ -82,30 +82,30 @@ const AdminDashboard = () => {
       {
         label: "Quantity Sold",
         data: data.topProducts.map((product) => product.totalSold),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        backgroundColor: "rgba(75, 192, 192, 0.5)",
       },
     ],
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={1}>
       {/* Total Sales, Orders, Users */}
       <Grid item xs={12} md={4}>
         <Paper elevation={3} sx={{ padding: 2 }}>
           <Typography variant="h6">Total Sales</Typography>
-          <Typography variant="h4">${data?.totalSales.toFixed(2)}</Typography>
+          <Typography variant="h6">${data?.totalSales.toFixed(2)}</Typography>
         </Paper>
       </Grid>
       <Grid item xs={12} md={4}>
         <Paper elevation={3} sx={{ padding: 2 }}>
-          <Typography variant="h6">Orders</Typography>
-          <Typography variant="h4">{data?.totalOrders}</Typography>
+          <Typography variant="h6">Total Orders</Typography>
+          <Typography variant="h6">{data?.totalOrders}</Typography>
         </Paper>
       </Grid>
       <Grid item xs={12} md={4}>
         <Paper elevation={3} sx={{ padding: 2 }}>
-          <Typography variant="h6">Users</Typography>
-          <Typography variant="h4">{data?.totalUsers}</Typography>
+          <Typography variant="h6">Total Users</Typography>
+          <Typography variant="h6">{data?.totalUsers}</Typography>
         </Paper>
       </Grid>
 

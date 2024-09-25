@@ -91,11 +91,12 @@ const ProductDetails = () => {
                 </Typography>
                 <Box sx={{ mt: 2 }}>
                   {/* Conditionally render "Add to Cart" button if product is not in the cart */}
-                  {!isProductInCart && (
+                  {!isProductInCart && user?.role === 'user' && (
                     <Button
                       onClick={() => {
                         if (!user) {
                           toast.warning("Please login and continue...");
+                          return
                         }
                         setOpen(true);
                       }}
@@ -108,7 +109,7 @@ const ProductDetails = () => {
                   )}
                   <Button
                     onClick={() =>
-                      user
+                      user && user?.role === 'user'
                         ? navigate(`/order/product`, { state: product })
                         : navigate("/login")
                     }

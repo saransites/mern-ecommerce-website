@@ -287,7 +287,8 @@ const Products = () => {
                   }}
                   className="group animate-slideUp"
                   style={{
-                    animationTimeline: "view(block 50% 10%)",
+                    animationTimeline: "view()",
+                    animationRange:"entry",
                   }}
                 >
                   <CardMedia
@@ -335,7 +336,7 @@ const Products = () => {
                       <div
                         className="iconBox overflow-hidden bg-[#472a7cfd] hover:bg-[#472a7cd3] cursor-pointer relative group"
                         onClick={() => {
-                          user
+                          user && user.role === 'user'
                             ? navigate(`/order/product`, { state: product })
                             : navigate("/login");
                         }}
@@ -349,7 +350,7 @@ const Products = () => {
                       </div>
                     </div>
                   </CardContent>
-                  {!isProductInCart(product.title) && (
+                  {!isProductInCart(product.title) && user?.role ==='user' && (
                     <Box
                       sx={{
                         position: "absolute",

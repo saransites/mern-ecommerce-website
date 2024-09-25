@@ -40,6 +40,10 @@ const AdminIndex = () => {
           m: 1,
           borderRadius: "8px",
           overflowX: "auto",
+          height:"100vh",
+          '&::-webkit-scrollbar':{
+            width:0
+          }
         }}
       >
         <Outlet />
